@@ -1,5 +1,5 @@
 {
-    "name": "konetix/clank-bundle",
+    "name": "jdare/clank-bundle",
     "type": "symfony-bundle",
     "description": "Symfony ClankBundle",
     "keywords": ["Web Socket Application"],
@@ -15,7 +15,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": "~2.1",
-        "cboden/Ratchet": "0.2.*"
+        "cboden/Ratchet": "^0.2"
     },
     "autoload": {
         "psr-0": { "JDare\\ClankBundle": "" }
