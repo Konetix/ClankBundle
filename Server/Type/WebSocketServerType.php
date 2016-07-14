@@ -4,6 +4,7 @@ namespace JDare\ClankBundle\Server\Type;
 
 use JDare\ClankBundle\Periodic\PeriodicInterface;
 use JDare\ClankBundle\Event\ServerEvent;
+use Ratchet\Wamp\TopicManager;
 use Ratchet\WebSocket\WsServer;
 use Ratchet\Wamp\WampServer;
 use Ratchet\Session\SessionProvider;
@@ -79,25 +80,28 @@ class WebSocketServerType implements ServerTypeInterface
      */
     private function setupApp()
     {
+        $topicManager = new TopicManager();
+        $topicManager->setWampApplication($this->getContainer()->get("jdare_clank.clank_app"));
         if ($this->session instanceof \SessionHandlerInterface)
         {
             $serverStack = new SessionProvider(
                 new WampServer(
-                    $this->getContainer()->get("jdare_clank.clank_app")
+                    $this->getContainer()->get("jdare_clank.clank_app"),
+                    $topicManager
                 ),
                 $this->session
             );
 
         }else{
             $serverStack = new WampServer(
-                $this->getContainer()->get("jdare_clank.clank_app")
+                $this->getContainer()->get("jdare_clank.clank_app"),
+                $topicManager
             );
         }
 
+        $wsServer = new WsServer($serverStack);
 
-        $this->app = new WsServer(
-            $serverStack
-        );
+        $this->app = new \Ratchet\Http\HttpServer($wsServer);
     }
 
     /**
